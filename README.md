@@ -1,34 +1,22 @@
-📘 Descripción completa (para README.md o GitHub main page)
+📘 Descripción completa
 argos-osint-installer es un script modular y automatizado diseñado para la distribución argentina argOS, orientado a la instalación rápida, sencilla y controlada de herramientas OSINT (Open Source Intelligence). Este proyecto nace con el objetivo de potenciar entornos de ciberseguridad, investigación digital, análisis forense y entrenamiento profesional dentro del ecosistema nacional.
-
+-
 🔧 Funciones principales
 ✅ Instalación automática o personalizada de herramientas OSINT populares.
-
 📋 Menú interactivo basado en whiptail, intuitivo y funcional.
-
 💾 Registro de logs para depuración y seguimiento.
-
 🧩 Agrega accesos directos y alias para cada herramienta instalada.
-
 🖥️ Compatible con escritorios XFCE y terminal puro.
-
 🇦🇷 Totalmente pensado para argOS (Linux argentino).
 
 🔍 Herramientas incluidas (hasta ahora)
 SpiderFoot
-
 theHarvester
-
 Photon
-
 Amass
-
 Holehe
-
 Sherlock
-
 GHunt
-
 Metagoofil
 
 🚀 Cómo usar
