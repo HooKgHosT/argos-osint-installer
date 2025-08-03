@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+mkdir -p ~/osint-tools
+cp /usr/local/bin/argos-osint-installer.sh ~/osint-tools/
+chmod +x ~/osint-tools/argos-osint-installer.sh
+ln -sf ~/osint-tools/argos-osint-installer.sh /usr/local/bin/argos-osint-installer
