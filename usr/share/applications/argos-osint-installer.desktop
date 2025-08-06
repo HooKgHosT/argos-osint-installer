@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=argOS OSINT Installer
+Comment=Instalador de herramientas OSINT para ArgOS
+Exec=/opt/argos-osint/argos-osint-installer.sh
+Icon=utilities-terminal
+Categories=Utility;
+Terminal=true
