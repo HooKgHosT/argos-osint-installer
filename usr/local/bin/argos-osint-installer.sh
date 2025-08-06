@@ -33,11 +33,34 @@ install_package() {
 # Instalación de dependencias comunes
 instalar_dependencias() {
     log "Instalando dependencias básicas..."
-    local packages=(git curl wget build-essential python3 python3-pip python3-venv libffi-dev libssl-dev exiftool net-tools)
+    local packages=(git curl wget build-essential python3 python3-pip python3-venv libffi-dev libssl-dev exiftool net-tools xfce4-terminal)
     for pkg in "${packages[@]}"; do
         install_package "$pkg"
     done
     pip install --upgrade pip
+}
+
+# Función para crear un lanzador en el menú XFCE
+crear_launcher() {
+    local nombre="$1"
+    local script_py="$2"
+    local ruta="$TOOLS_DIR/$nombre"
+    local launcher="$HOME/.local/share/applications/${nombre}.desktop"
+
+    cat <<EOF > "$launcher"
+[Desktop Entry]
+Type=Application
+Name=$nombre
+GenericName=Herramienta OSINT
+Comment=Ejecutar $nombre desde terminal
+Exec=xfce4-terminal --working-directory="$ruta" --command="python3 $script_py"
+Icon=utilities-terminal
+Categories=OSINT;Utility;
+Terminal=true
+EOF
+
+    chmod +x "$launcher"
+    update-desktop-database ~/.local/share/applications/
 }
 
 # Instalación desde repositorio
@@ -53,20 +76,12 @@ instalar_repo() {
         chmod +x *.py 2>/dev/null
         cd ..
 
-        # Alias
+        # Crear alias (opcional)
         [[ -n "$alias_cmd" ]] && echo "alias $alias_cmd='python3 $TOOLS_DIR/$nombre/$alias_cmd.py'" >> ~/.bashrc
 
-        # Lanzador XFCE
-        cat <<EOF >~/.local/share/applications/${nombre}.desktop
-[Desktop Entry]
-Name=$nombre
-Exec=exo-open --launch TerminalEmulator bash -c 'cd "$TOOLS_DIR/$nombre"; read -p "Presioná enter para ejecutar..."; python3 $alias_cmd.py'
-Icon=utilities-terminal
-Type=Application
-Categories=OSINT;
-Terminal=true
-EOF
-        update-desktop-database ~/.local/share/applications 2>/dev/null
+        # Crear lanzador en el menú
+        crear_launcher "$nombre" "$alias_cmd.py"
+
         log "$nombre instalado correctamente."
     else
         log "Falló la instalación de $nombre"
@@ -80,8 +95,18 @@ instalar_sherlock()    { instalar_repo "Sherlock" "https://github.com/sherlock-p
 instalar_holehe()      { instalar_repo "Holehe" "https://github.com/megadose/holehe.git" "holehe"; }
 instalar_ghunt()       { instalar_repo "GHunt" "https://github.com/mxrch/GHunt.git" "ghunt"; }
 instalar_metagoofil()  { instalar_repo "Metagoofil" "https://github.com/laramies/metagoofil.git" "metagoofil"; }
-instalar_theharvester(){ pip install theHarvester && echo "alias theharvester='theHarvester'" >> ~/.bashrc; }
-instalar_amass()       { pip install amass && echo "alias amass='amass'" >> ~/.bashrc; }
+
+instalar_theharvester() {
+    pip install theHarvester
+    echo "alias theharvester='theHarvester'" >> ~/.bashrc
+    crear_launcher "theHarvester" "theHarvester"
+}
+
+instalar_amass() {
+    pip install amass
+    echo "alias amass='amass'" >> ~/.bashrc
+    crear_launcher "Amass" "amass"
+}
 
 # Instalación completa automática
 instalacion_total() {
@@ -100,6 +125,7 @@ instalacion_total() {
     log "Sistema actualizado correctamente."
 
     log "Instalación completa finalizada."
+    xfdesktop --reload 2>/dev/null
 }
 
 # Instalación manual (menú herramienta por herramienta)
@@ -132,6 +158,8 @@ instalacion_manual() {
         "\"8\"") instalar_metagoofil ;;
         esac
     done
+
+    xfdesktop --reload 2>/dev/null
 }
 
 # Menú principal
